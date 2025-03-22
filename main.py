@@ -9,10 +9,11 @@ filterwarnings("ignore")
 if __name__ == "__main__":
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
+    size = comm.Get_size()
 
     # Load the distance matrix (all processes will load the same data)
     if rank == 0:
-        distance_matrix = pd.read_csv('./data/city_distances.csv').to_numpy()
+        distance_matrix = pd.read_csv('./data/city_distances_extended.csv').to_numpy()
     else:
         distance_matrix = None
 
@@ -57,4 +58,14 @@ if __name__ == "__main__":
     if rank == 0:
         print("Parallel run time:", par_time)
         
-        print(seq_time / par_time)
+        parallel_portion = 0.85
+        speedup = seq_time / par_time
+        efficiency = speedup / size
+        amdahl_speedup = 1 / ((1 - parallel_portion) + (parallel_portion / size))
+        gustafson_speedup = size - (1 - parallel_portion)  * (size - 1)
+        
+        print("======= Metrics ======= ")
+        print(f"Speedup: {speedup}")
+        print(f"Efficiency: {efficiency}")
+        print(f"Amdahl's Speedup: {amdahl_speedup}")
+        print(f"Gustafson's Speedup: {gustafson_speedup}")

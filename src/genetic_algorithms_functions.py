@@ -32,7 +32,6 @@ def calculate_fitness(route,
 
     total_distance += return_to_depot
 
-    
     return -total_distance
 
 
