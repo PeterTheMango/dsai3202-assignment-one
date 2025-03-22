@@ -39,6 +39,7 @@ if __name__ == "__main__":
                                     infeasible_penalty, 
                                     stagnation_limit)
         print("Sequential run time:", seq_time)
+        print("\n\n")
     
     # Ensure all processes wait until the sequential part is finished.
     comm.Barrier()
@@ -55,3 +56,5 @@ if __name__ == "__main__":
     # Only rank 0 prints the parallel run time.
     if rank == 0:
         print("Parallel run time:", par_time)
+        
+        print(seq_time / par_time)
